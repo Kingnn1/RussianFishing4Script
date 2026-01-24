@@ -103,6 +103,8 @@ _C.BOT.PAUSE_DURATION = 600
 # Whether the Windows ClickLock is enabled.
 # The time you need to hold down the mouse button must be set to "long".
 _C.BOT.CLICK_LOCK = False
+# Jitter for various time delays (0.0-1.0)
+_C.BOT.JITTER = 0.2
 
 
 # ---------------------------------------------------------------------------- #

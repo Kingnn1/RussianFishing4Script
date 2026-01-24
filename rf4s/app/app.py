@@ -532,23 +532,11 @@ class BotApp(App):
         mode = self.cfg.PROFILE[profile_name].MODE.upper()
         
         user_profile = CN({"NAME": profile_name}, new_allowed=True)
-        user_tolerance = CN({"NAME": "TOLERANCE." + profile_name}, new_allowed=True)
 
         user_profile.merge_from_other_cfg(self.cfg.PROFILE[mode])
         user_profile.merge_from_other_cfg(self.cfg.PROFILE[profile_name])
 
-        # Merge tolerance profiles if they exist. Config may not include
-        # tolerances for every profile/mode, so guard against missing keys.
-        if hasattr(self.cfg, "TOLERANCE"):
-            tol_root = getattr(self.cfg.TOLERANCE, "PROFILE", None)
-            if isinstance(tol_root, CN):
-                if mode in tol_root:
-                    user_tolerance.merge_from_other_cfg(tol_root[mode])
-                if profile_name in tol_root:
-                    user_tolerance.merge_from_other_cfg(tol_root[profile_name])
-
         self.cfg.PROFILE = user_profile  # Overwrite default profiles
-        self.cfg.TOLERANCE.PROFILE = user_tolerance  # Overwrite default tolerance profiles
 
     def merge_args_to_cfg(self) -> None:
         """Must be called after the profile is correctly configured."""

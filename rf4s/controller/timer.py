@@ -27,55 +27,15 @@ else:
     OUTER_ROOT = Path(__file__).resolve().parents[2]
 
 RARE_EVENT_TIMEOUT = 16
+TIME_JITTER_SYSTEM = 0.05
 
-TIME_JITTER = 0.05  # Default time jitter for bot actions (0.0-1.0)
 random.seed(datetime.datetime.now().timestamp())
 
 
-def add_jitter(time: float, cfg=None, key: str | None = None) -> float:
-    """
-    Add jitter to a base time.
-
-    If `cfg` and `key` are provided, attempt to look up a tolerance at
-    `cfg.TOLERANCE` using the dot-separated `key` (e.g. 'PROFILE.CHECK_DELAY').
-
-    Tolerance nodes are expected to be CfgNodes with fields:
-      - TYPE: 'abs' or 'pct'
-      - VALUE: numeric
-
-    If no tolerance is found, fallback to the global TIME_JITTER (percent).
-    """
-    delta = None
-    # Try to resolve per-key tolerance when cfg and key provided
-    if cfg is not None and key:
-        try:
-            tol_node = cfg.TOLERANCE
-            for part in key.split("."):
-                if hasattr(tol_node, part):
-                    tol_node = getattr(tol_node, part)
-                else:
-                    tol_node = None
-                    break
-            if tol_node is not None:
-                # tol_node expected to be a CN-like with TYPE and VALUE
-                ttype = getattr(tol_node, "TYPE", None)
-                tvalue = getattr(tol_node, "VALUE", None)
-                if ttype is not None and tvalue is not None:
-                    if isinstance(ttype, str) and ttype.lower() == "abs":
-                        delta = float(tvalue)
-                    else:
-                        # treat as percent
-                        delta = float(tvalue) / 100.0 * time
-        except Exception:
-            # Any problem, fallback to default
-            delta = None
-
-    if delta is None:
-        delta = time * abs(TIME_JITTER)
-
-    low = max(0.0, time - delta)
-    high = time + delta
-    return round(random.uniform(low, high), 2)
+def add_jitter(time: float, jitter: float = TIME_JITTER_SYSTEM) -> float:
+     # Add random jitter to a given time value.
+    time_with_jitter = round(random.uniform(time - jitter, time + jitter), 4)
+    return   time_with_jitter
 
 
 class Timer:

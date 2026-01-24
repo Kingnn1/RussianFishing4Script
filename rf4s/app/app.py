@@ -1027,7 +1027,7 @@ class HarvestApp(App):
             timer_sleep(add_jitter(LOOP_DELAY))
         pag.press("space")
         logger.info("Baits harvested succussfully")
-        timer_sleep(ANIMATION_DELAY)
+        timer_sleep(add_jitter(ANIMATION_DELAY))
 
     def refill_player_stats(self) -> None:
         """Refill player stats using tea and carrot."""
@@ -1068,7 +1068,7 @@ class HarvestApp(App):
             pag.press(key)
         else:  # Open food menu
             with pag.hold("t"):
-                timer_sleep(ANIMATION_DELAY)
+                timer_sleep(add_jitter(ANIMATION_DELAY))
                 food_position = self.detection.get_food_position(item)
                 pag.moveTo(food_position)
                 pag.click()

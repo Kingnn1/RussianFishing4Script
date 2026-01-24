@@ -27,14 +27,15 @@ else:
     OUTER_ROOT = Path(__file__).resolve().parents[2]
 
 RARE_EVENT_TIMEOUT = 16
+TIME_JITTER_SYSTEM = 0.05
 
-TIME_JITTER = 0.2
 random.seed(datetime.datetime.now().timestamp())
 
 
-def add_jitter(time: float) -> float:
-    delta = time * abs(TIME_JITTER)
-    return round(random.uniform(time - delta, time + delta), 2)
+def add_jitter(time: float, jitter: float = TIME_JITTER_SYSTEM) -> float:
+     # Add random jitter to a given time value.
+    time_with_jitter = round(random.uniform(time - jitter, time + jitter), 4)
+    return   time_with_jitter
 
 
 class Timer:

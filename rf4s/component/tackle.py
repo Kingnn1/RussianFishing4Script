@@ -378,7 +378,7 @@ class Tackle:
         coords.append((-sum(x for x, _ in coords), -sum(y for _, y in coords)))
         for x, y in coords:
             win32api.mouse_event(win32con.MOUSEEVENTF_MOVE, x, y, 0, 0)
-            sleep(add_jitter(ANIMATION_DELAY))
+            sleep(ANIMATION_DELAY)
 
     def equip_item(self, item) -> None:
         """Equip an item from the menu or inventory.
